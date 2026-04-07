@@ -437,8 +437,9 @@ function createBehaviourButton(elementNode, behaviour, index, total, isSelected)
   const button = document.createElement("button");
   const angle = total <= 1 ? -90 : -180 + (180 / (total - 1)) * index;
   const radius = clamp(300, 24 * total + 210, 320);
-  const lightMix = `${Math.max(42, 84 - index * 7)}%`;
-  const darkMix = `${Math.max(48, 92 - index * 7)}%`;
+  const shadeProgress = total <= 1 ? 0 : index / (total - 1);
+  const lightMix = `${Math.round(48 + shadeProgress * 44)}%`;
+  const darkMix = `${Math.round(62 + shadeProgress * 35)}%`;
 
   button.className = "behaviour-button";
   button.type = "button";
