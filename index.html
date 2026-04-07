@@ -6,6 +6,10 @@
     <meta name="theme-color" content="#6746d6">
     <title>Domain Explorer</title>
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="dist/styles.css">
   </head>
   <body>
@@ -20,14 +24,14 @@
 
       <section class="session-home" aria-label="Session home">
         <button class="create-session-button" type="button">
-          <span aria-hidden="true">+</span>
+          <span aria-hidden="true"><i class="fa-solid fa-plus"></i></span>
           <strong>Create new</strong>
         </button>
 
         <div class="resume-panel">
           <div>
             <p class="eyebrow">Saved sessions</p>
-            <h2>Resume an avatar</h2>
+            <h2>Resume a session</h2>
           </div>
           <div class="session-list"></div>
         </div>
@@ -58,7 +62,6 @@
           <div class="orbit" data-state="ready"></div>
           <section class="behaviour-screen" aria-label="Select a behaviour" hidden>
             <article class="behaviour-detail" role="button" tabindex="0" aria-label="Select this behaviour and continue">
-              <p class="selection-card__label">Selected behaviour</p>
               <h2></h2>
               <div class="behaviour-detail__description"></div>
               <span class="behaviour-detail__cta">Tap to select and continue</span>
