@@ -35,7 +35,17 @@
           </div>
           <div class="session-list"></div>
         </div>
+
+        <button class="debug-storage-button" type="button" data-action="show-session-store">state</button>
       </section>
+
+      <dialog class="storage-dialog" aria-labelledby="storage-dialog-title">
+        <div class="storage-dialog__heading">
+          <h2 id="storage-dialog-title">Stored sessions</h2>
+          <button class="icon-button" type="button" data-action="close-session-store" aria-label="Close stored sessions">×</button>
+        </div>
+        <pre class="storage-dialog__content"></pre>
+      </dialog>
 
       <section class="avatar-picker" aria-label="Select an avatar" hidden>
         <div class="panel-heading">

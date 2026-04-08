@@ -2,11 +2,15 @@ const DOMAINS_URL = "data/domains.json";
 const AVATARS_URL = "data/avatars.json";
 const NAVIGATION_URL = "data/navigation.json";
 const STORE_KEY = "domainExplorerState";
+const SENSITIVE_FORM_FIELDS = new Set(["student-name"]);
 
 const sessionHome = document.querySelector(".session-home");
 const avatarPicker = document.querySelector(".avatar-picker");
 const explorer = document.querySelector(".explorer");
 const createSessionButton = document.querySelector(".create-session-button");
+const storageButton = document.querySelector("[data-action='show-session-store']");
+const storageDialog = document.querySelector(".storage-dialog");
+const storageDialogContent = document.querySelector(".storage-dialog__content");
 const sessionList = document.querySelector(".session-list");
 const avatarGrid = document.querySelector(".avatar-grid");
 const activeSession = document.querySelector(".active-session");
@@ -91,6 +95,11 @@ function bindEvents() {
     renderHome();
     showView("home");
   });
+
+  storageButton.addEventListener("click", showStoredSessions);
+  storageDialog.querySelector("[data-action='close-session-store']").addEventListener("click", () => {
+    storageDialog.close();
+  });
 }
 
 function loadSessions() {
@@ -98,7 +107,9 @@ function loadSessions() {
 
   try {
     const stored = JSON.parse(localStorage.getItem(STORE_KEY)) ?? fallback;
-    return Array.isArray(stored.sessions) ? stored.sessions.map(ensureSessionShape) : [];
+    const loadedSessions = Array.isArray(stored.sessions) ? stored.sessions.map(ensureSessionShape) : [];
+    localStorage.setItem(STORE_KEY, JSON.stringify({ sessions: loadedSessions }, null, 2));
+    return loadedSessions;
   } catch {
     return [];
   }
@@ -117,8 +128,7 @@ function mergeFormFields(fields) {
     "observer-name",
     "observational-context",
     "professional-reflection",
-    "support-learning",
-    "student-name"
+    "support-learning"
   ];
 
   return requiredFields.map((name) => {
@@ -127,7 +137,22 @@ function mergeFormFields(fields) {
 }
 
 function saveSessions() {
+  sessions = sessions.map(ensureSessionShape);
   localStorage.setItem(STORE_KEY, JSON.stringify({ sessions }, null, 2));
+}
+
+function showStoredSessions() {
+  let storedSessions = [];
+
+  try {
+    const stored = JSON.parse(localStorage.getItem(STORE_KEY)) ?? { sessions: [] };
+    storedSessions = Array.isArray(stored.sessions) ? stored.sessions.map(ensureSessionShape) : [];
+  } catch {
+    storedSessions = [];
+  }
+
+  storageDialogContent.textContent = JSON.stringify({ sessions: storedSessions }, null, 2);
+  storageDialog.showModal();
 }
 
 function renderHome() {
@@ -768,6 +793,10 @@ function bindFormAutosave(container) {
 }
 
 function updateFormField(name, value) {
+  if (SENSITIVE_FORM_FIELDS.has(name)) {
+    return;
+  }
+
   const session = currentSession();
 
   if (!session) {
